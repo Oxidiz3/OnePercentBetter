@@ -1,0 +1,71 @@
+# Screen:
+#     timed_goal1: timed_goal1
+#     counter_goal1: counter_goal1
+#
+#     BoxLayout:
+#         orientation: 'vertical'
+#         MDToolbar:
+#             title: 'One Percent Better'
+#             elevation: 8
+#             height: dp(40)
+#
+#        CountGoal:
+#            BoxLayout:
+#                orientation: "horizontal"
+#                MDRectangleFlatButton:
+#                    text: CountGoal.goal_name
+#
+#                MDRectangleFlatButton:
+#                    text: CountGoal.goal_amount
+#
+#                MDIconButton:
+#                    icon: "plus"
+#
+#         TimedGoal:
+#             id: timed_goal1
+#             BoxLayout:
+#                 orientation: "horizontal"
+#                 MDRectangleFlatButton:
+#                     #Goal name
+#                     text: str(root.timed_goal1.goal_name)
+#
+#                 MDRectangleFlatButton:
+#                     #Goal Amount
+#                     text: str(root.timed_goal1.goal_amount)
+#
+#                 MDIconButton:
+#                     icon: "clock"
+#
+#         MDLabel:
+#             text: "Goals"
+#             halign: "left"
+#
+#         MDBottomAppBar:
+#             MDFloatingActionButton:
+#                 icon: "plus"
+#                 elevation_normal:8
+#
+#<TimedGoal>:
+#
+#    BoxLayout:
+#        orientation: "horizontal"
+#        MDRectangleFlatButton:
+#            text: root.goal_name
+#
+#        MDRectangleFlatButton:
+#            text: root.goal_amount
+#
+#        MDIconButton:
+#            icon: "clock"
+#
+#<CountGoal>:
+#    BoxLayout:
+#        orientation: "horizontal"
+#        MDRectangleFlatButton:
+#            text: CountGoal.goal_name
+#
+#        MDRectangleFlatButton:
+#            text: CountGoal.goal_amount
+#
+#        MDIconButton:
+#            icon: "plus"
