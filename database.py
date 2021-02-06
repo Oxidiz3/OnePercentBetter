@@ -27,6 +27,9 @@ class Database:
             self.cur = self.conn.cursor()
             self.cur.execute(sql_create_goals_table)
             logging.info(sqlite3.version)
+            self.create_goal('Lose Weight', 'alarm', 10, 100, 0.01, 20)
+            self.create_goal('Learn to Program', 'alarm', 1, 100, .01, 20)
+            self.create_goal('Sleep More', 'alarm', 4, 8, .01, 20)
         except Error as e:
             logging.info(e)
 
@@ -93,14 +96,30 @@ class Database:
         return tmpList
 
 
-'''
+    def get_goal_from_name(self, name):
+        """
+        Grabs all the goals in the database and returns them as a list...hopefully.
+        :return:
+        """
+
+        sql = f" SELECT name, goal_icon, start, end, iteration_amount, iteration_to_goal FROM goals WHERE name = '{name}'"
+        self.cur.execute(sql)
+        goalList = self.cur.fetchall()
+        tmpList = list()
+        for i in goalList:
+            tmp = dict()
+            tmp['goal_name'] = i[0]
+            tmp['goal_icon'] = i[1]
+            tmp['start'] = i[2]
+            tmp['end'] = i[3]
+            tmp['iteration_amount'] = i[4]
+            tmp['iteration_goal'] = i[5]
+            tmp['current_value'] = int(i[2] * math.exp(i[4] * i[5]))
+            tmpList.append(tmp)
+        return tmpList
+
 if __name__ == "__main__":
     data = Database()
-    data.create_goal('Lose Weight', 'alarm',10, 100, 0.01, 20)
-    data.create_goal('Learn to Program', 'alarm', 1, 100, .01, 20)
-    data.create_goal('Sleep More', 'alarm', 4, 8, .01, 20)
-    pprint(data.get_all_goals())
-    data.delete_goal('Lose Weight', 10, 100)
-    data.delete_goal('Learn to Program', 1, 100)
-    data.delete_goal('Sleep More', 4, 8)
-'''
+    print(data.get_goal_from_name('Lose Weight'))
+
+
