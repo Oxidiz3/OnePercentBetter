@@ -94,10 +94,9 @@ class Database:
             tmpList.append(tmp)
         return tmpList
 
-
+'''
 if __name__ == "__main__":
     data = Database()
-    date = datetime.date.today()
     data.create_goal('Lose Weight', 'alarm',10, 100, 0.01, 20)
     data.create_goal('Learn to Program', 'alarm', 1, 100, .01, 20)
     data.create_goal('Sleep More', 'alarm', 4, 8, .01, 20)
@@ -105,4 +104,5 @@ if __name__ == "__main__":
     data.delete_goal('Lose Weight', 10, 100)
     data.delete_goal('Learn to Program', 1, 100)
     data.delete_goal('Sleep More', 4, 8)
+'''
 
