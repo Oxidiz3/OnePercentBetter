@@ -1,71 +1,142 @@
-# Screen:
-#     timed_goal1: timed_goal1
-#     counter_goal1: counter_goal1
-#
-#     BoxLayout:
-#         orientation: 'vertical'
-#         MDToolbar:
-#             title: 'One Percent Better'
-#             elevation: 8
-#             height: dp(40)
-#
-#        CountGoal:
-#            BoxLayout:
-#                orientation: "horizontal"
-#                MDRectangleFlatButton:
-#                    text: CountGoal.goal_name
-#
-#                MDRectangleFlatButton:
-#                    text: CountGoal.goal_amount
-#
-#                MDIconButton:
-#                    icon: "plus"
-#
-#         TimedGoal:
-#             id: timed_goal1
-#             BoxLayout:
-#                 orientation: "horizontal"
-#                 MDRectangleFlatButton:
-#                     #Goal name
-#                     text: str(root.timed_goal1.goal_name)
-#
-#                 MDRectangleFlatButton:
-#                     #Goal Amount
-#                     text: str(root.timed_goal1.goal_amount)
-#
-#                 MDIconButton:
-#                     icon: "clock"
-#
-#         MDLabel:
-#             text: "Goals"
-#             halign: "left"
-#
-#         MDBottomAppBar:
-#             MDFloatingActionButton:
-#                 icon: "plus"
-#                 elevation_normal:8
-#
-#<TimedGoal>:
-#
-#    BoxLayout:
-#        orientation: "horizontal"
-#        MDRectangleFlatButton:
-#            text: root.goal_name
-#
-#        MDRectangleFlatButton:
-#            text: root.goal_amount
-#
-#        MDIconButton:
-#            icon: "clock"
-#
-#<CountGoal>:
-#    BoxLayout:
-#        orientation: "horizontal"
-#        MDRectangleFlatButton:
-#            text: CountGoal.goal_name
-#
-#        MDRectangleFlatButton:
-#            text: CountGoal.goal_amount
-#
-#        MDIconButton:
-#            icon: "plus"
+<MainScreen>
+    name: "main"
+    BoxLayout:
+        orientation: 'vertical'
+        MDToolbar:
+            title: 'One Percent Better'
+            elevation: 8
+            height: dp(40)
+        ScrollView:
+            MDList:
+                id: goal_list
+        MDBottomAppBar:
+            MDToolbar:
+                icon: "plus"
+                type: "bottom"
+#                left_action_items: [[lambda x: root.manager.current = "info"]]
+                on_action_button: root.manager.current = "goal_creation"
+                mode: "free-end"
+
+<GoalCreationScreen>:
+    name: 'goal_creation'
+    BoxLayout:
+        orientation: 'vertical'
+
+        MDToolbar:
+            title: 'Goal Creation'
+            elevation: 8
+            height: dp(40)
+
+        # vvvvvvv Everything but the toolbars goes in here vvvvvvv
+        BoxLayout:
+            orientation: 'vertical'
+            padding: dp(10)
+
+            BoxLayout:
+                size_hint_max_y: dp(25)
+                orientation: 'horizontal'
+
+                MDLabel:
+                    text: "Goal Type"
+                    pos_hint: {"center_y": 0.5}
+                MDIconButton:
+                    icon: "counter"
+                    pos_hint: {"center_y": 0.5}
+                MDIconButton:
+                    icon: "alarm"
+                    pos_hint: {"center_y": 0.5}
+
+            MDTextField:
+                size_hint_max_y: dp(25)
+                hint_text: "Goal Name"
+                helper_text: "Pick something unique and fun"
+                helper_text_mode: "on_focus"
+
+            MDLabel:
+                text: "How hard do I want my goal"
+
+            #Check marks --------------
+            BoxLayout:
+                orientation: "horizontal"
+                size_hint_max_y: dp(25)
+                IntensityCheck:
+                    active: True
+                    radio_icon_down: "emoticon-excited-outline"
+                    selected_color: (91,255,61,1)
+                    pos_hint: {"center_y": 0.5}
+                IntensityCheck:
+                    radio_icon_down: "emoticon-happy-outline"
+                    pos_hint: {"center_y": 0.5}
+                IntensityCheck:
+                    radio_icon_down: "emoticon-neutral-outline"
+                    pos_hint: {"center_y": 0.5}
+                IntensityCheck:
+                    radio_icon_down: "emoticon-sad-outline"
+                    pos_hint: {"center_y": 0.5}
+                IntensityCheck:
+                    radio_icon_down: "emoticon-devil-outline"
+                    pos_hint: {"center_y": 0.5}
+
+
+            MDTextField:
+                hint_text: "End Goal"
+                helper_text: "Where do you want to be when you're done"
+                helper_text_mode: "on_focus"
+        # ^^^^^ Everything but the toolbars goes in here  ^^^^^
+
+        MDBottomAppBar:
+            MDToolbar:
+                icon: "plus"
+                type: "bottom"
+                on_action_button: root.manager.current = "main"
+                mode: "free-end"
+
+<GoalStatsScreen>:
+    name: 'goal_stats'
+    BoxLayout:
+        orientation: 'vertical'
+        MDToolbar:
+            title: 'One Percent Better'
+            elevation: 8
+            height: dp(40)
+        ScrollView:
+            MDList:
+                id: goal_list
+        MDBottomAppBar:
+            MDToolbar:
+                icon: "plus"
+                type: "bottom"
+                on_action_button: root.manager.current = "main"
+                mode: "free-end"
+
+
+<InfoScreen>:
+    name: 'info'
+    BoxLayout:
+        orientation: 'vertical'
+        MDToolbar:
+            title: 'One Percent Better'
+            elevation: 8
+            height: dp(40)
+        ScrollView:
+            MDList:
+                id: goal_list
+        MDBottomAppBar:
+            MDToolbar:
+                icon: "plus"
+                type: "bottom"
+                on_action_button: root.manager.current = "main"
+                mode: "free-end"
+
+<IntensityCheck@MDCheckbox>:
+    group: 'intensity'
+    size_hint: None, None
+    size: dp(48), dp(48)
+
+<Goal>:
+    text: root.goal_name
+    secondary_text: root.goal_amount
+
+    IconLeftWidget:
+        id: goal_icon
+        icon: root.goal_icon
