@@ -3,7 +3,7 @@
     BoxLayout:
         orientation: 'vertical'
         MDToolbar:
-            title: 'One Percent Better'
+            title: '1% Better'
             elevation: 8
             height: dp(40)
         ScrollView:
@@ -32,19 +32,6 @@
             orientation: 'vertical'
             padding: dp(10)
 
-            BoxLayout:
-                size_hint_max_y: dp(25)
-                orientation: 'horizontal'
-
-                MDLabel:
-                    text: "Goal Type"
-                    pos_hint: {"center_y": 0.5}
-                MDIconButton:
-                    icon: "counter"
-                    pos_hint: {"center_y": 0.5}
-                MDIconButton:
-                    icon: "alarm"
-                    pos_hint: {"center_y": 0.5}
 
             MDTextField:
                 size_hint_max_y: dp(25)
@@ -53,50 +40,77 @@
                 helper_text_mode: "on_focus"
 
             MDLabel:
-                text: "How hard do I want my goal"
+                size_hint_max_y: dp(25)
+                text: "How difficult should your goal be?"
 
             #Check marks --------------
             BoxLayout:
                 orientation: "horizontal"
                 size_hint_max_y: dp(25)
+
                 IntensityCheck:
+                    radio_icon_down: "emoticon-excited"
+                    pos_hint: {"center_y": 0.5}
                     active: True
-                    radio_icon_down: "emoticon-excited-outline"
-                    selected_color: (91,255,61,1)
-                    pos_hint: {"center_y": 0.5}
+                    on_active: root.get_intensity(0.01)
                 IntensityCheck:
-                    radio_icon_down: "emoticon-happy-outline"
+                    radio_icon_down: "emoticon-happy"
                     pos_hint: {"center_y": 0.5}
+                    on_active: root.get_intensity(0.03)
                 IntensityCheck:
-                    radio_icon_down: "emoticon-neutral-outline"
+                    radio_icon_down: "emoticon-neutral"
                     pos_hint: {"center_y": 0.5}
+                    on_active: root.get_intensity(0.05)
                 IntensityCheck:
-                    radio_icon_down: "emoticon-sad-outline"
+                    radio_icon_down: "emoticon-sad"
                     pos_hint: {"center_y": 0.5}
+                    on_active: root.get_intensity(0.07)
                 IntensityCheck:
-                    radio_icon_down: "emoticon-devil-outline"
+                    radio_icon_down: "emoticon-devil"
                     pos_hint: {"center_y": 0.5}
+                    on_active: root.get_intensity(0.1)
 
+            BoxLayout:
+                size_hint_max_y: dp(30)
+                orientation: 'horizontal'
 
-            MDTextField:
-                hint_text: "End Goal"
-                helper_text: "Where do you want to be when you're done"
-                helper_text_mode: "on_focus"
+                GoalType:
+                    radio_icon_normal: "counter"
+                    radio_icon_down: "counter"
+                    pos_hint: {"center_x": 0.3,"center_y": 0.5}
+                    active: True
+                    on_active: root.get_goal_type("counter")
+                MDLabel:
+                    text: "Goal Type"
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                GoalType:
+                    radio_icon_normal: "alarm"
+                    radio_icon_down: "alarm"
+                    on_active: root.get_goal_type("alarm")
+                    pos_hint: {"center_x": 0.8, "center_y": 0.5}
+
+            MDLabel
+                text: root.end_goal_text
+
+            MDSlider:
+                min: 0
+                max: 100
+
         # ^^^^^ Everything but the toolbars goes in here  ^^^^^
 
         MDBottomAppBar:
             MDToolbar:
-                icon: "plus"
-                type: "bottom"
-                on_action_button: root.manager.current = "main"
-                mode: "free-end"
+                icon: "check-circle"
+                on_action_button:
+                    root.manager.transition.direction = 'right'
+                    root.manager.current = "main"
 
 <GoalStatsScreen>:
     name: 'goal_stats'
     BoxLayout:
         orientation: 'vertical'
         MDToolbar:
-            title: 'One Percent Better'
+            title: '1% Better'
             elevation: 8
             height: dp(40)
         ScrollView:
@@ -115,7 +129,7 @@
     BoxLayout:
         orientation: 'vertical'
         MDToolbar:
-            title: 'One Percent Better'
+            title: '1% Better'
             elevation: 8
             height: dp(40)
         ScrollView:
@@ -133,10 +147,16 @@
     size_hint: None, None
     size: dp(48), dp(48)
 
-<Goal>:
+<GoalType@MDCheckbox>:
+    group: 'goal_type'
+    size_hint: None, None
+    size: dp(48), dp(48)
+
+<GoalListItem>:
     text: root.goal_name
     secondary_text: root.goal_amount
 
     IconLeftWidget:
-        id: goal_icon
+#    I don't think this is need anymore
+#        id: goal_icon
         icon: root.goal_icon
