@@ -1,15 +1,13 @@
 import logging
 import math
 import sqlite3
-from pprint import pprint
 from sqlite3 import Error
-import datetime
 
 
 class Database:
     def __init__(self, db_file=r"Database/onepercent.db"):
-        """Initializes the database for the app, it will handle all of the setup required for getting the database running
-        and started.
+        """Initializes the database for the app, it will handle all of the setup required for getting the database
+        running and started.
         :param db_file: a string to the database path.
         """
 
@@ -33,16 +31,16 @@ class Database:
             logging.info(e)
 
     def create_goal(self, goal_name, goal_icon, start_value, end_value, iteration_towards_goal, iteration_percent):
-        '''
+        """
         Creates a goal
         :param goal_name: name of the goal
         :param goal_icon: icon needed for the goal
         :param start_value: starting amount
         :param end_value: ending value
         :param iteration_towards_goal: how close to the goal are you.
-        :param iteration_percent:
+        :param iteration_percent: the percentage the iteration goes up by.
         :return:
-        '''
+        """
         # Checking to make sure there are no duplicate entries in the database already.
         select_sql = '''SELECT name, goal_icon, start, end, iteration_amount, iteration_to_goal FROM goals 
                         WHERE name = ? AND goal_icon = ?;'''
@@ -73,10 +71,10 @@ class Database:
             self.conn.commit()
 
     def get_all_goals(self):
-        '''
+        """
         Grabs all the goals in the database and returns them as a list...hopefully.
         :return:
-        '''
+        """
 
         sql = ''' SELECT name, goal_icon, start, end, iteration_amount, iteration_to_goal FROM goals'''
         self.cur.execute(sql)
@@ -94,6 +92,7 @@ class Database:
             tmpList.append(tmp)
         return tmpList
 
+
 '''
 if __name__ == "__main__":
     data = Database()
@@ -105,4 +104,3 @@ if __name__ == "__main__":
     data.delete_goal('Learn to Program', 1, 100)
     data.delete_goal('Sleep More', 4, 8)
 '''
-
