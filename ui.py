@@ -50,10 +50,11 @@ class GoalStatsScreen(Screen):
 
 class GoalCreationScreen(Screen):
     end_goal_text = StringProperty("Select a goal type")
+    start_goal_text = StringProperty("Select a goal type")
     goal_name = StringProperty("")
     icon = StringProperty("")
 
-    start_value = 0
+    start_value = NumericProperty(2)
     goal_intensity = NumericProperty(0.01)
     end_value = NumericProperty(0)
     iteration_towards_goal = NumericProperty(0)
@@ -75,13 +76,15 @@ class GoalCreationScreen(Screen):
     def reset_goal(self):
         # Reset Ui values
         self.ids.goal_name.text = ""
+        self.ids.start_value.text = ""
         self.ids.end_value.text = ""
+        self.start_goal_text = "Select a goal type"
         self.end_goal_text = "Select a goal type"
 
         # Reset values of variables
         self.goal_name = ""
         self.icon = ""
-        self.start_value = ""
+        self.start_value = 0
         self.end_value = 0
         self.iteration_towards_goal = 0
         self.intensity = 0.01

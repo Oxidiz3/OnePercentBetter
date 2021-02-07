@@ -83,6 +83,7 @@
                     pos_hint: {"center_x": 0.3,"center_y": 0.5}
                     on_active:
                         root.end_goal_text = "What is your final rep goal?"
+                        root.start_goal_text = "What is your starting rep goal?"
                         root.icon = "counter"
                 MDLabel:
                     text: "Goal Type"
@@ -92,12 +93,21 @@
                     radio_icon_down: "alarm"
                     on_active:
                         root.end_goal_text = "What is your final time goal?"
+                        root.start_goal_text = "What is your starting time goal?"
                         root.icon = "alarm"
                     pos_hint: {"center_x": 0.8, "center_y": 0.5}
 
             MDLabel
-                text: root.end_goal_text
+                text: root.start_goal_text
+            MDTextField:
+                id: start_value
+                required: True
+                input_filter: 'int'
+                helper_text_mode: "on_error"
+                helper_text: "Insert only numbers"
 
+            MDLabel
+                text: root.end_goal_text
             MDTextField:
                 id: end_value
                 required: True
