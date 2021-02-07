@@ -61,7 +61,7 @@ class Database:
         self.cur.execute(select_sql, dataTuple)
         goalList = self.cur.fetchall()
         # If there are no duplicate entries then the database goes ahead with the transaction.
-        if not goalList:
+        if not goalList and len(goal_name) != 0:
             dataTuple = (
                 goal_name,
                 goal_icon,
@@ -135,6 +135,10 @@ class Database:
         return tmpList
 
 
+'''
 if __name__ == "__main__":
     data = Database()
-    print(data.get_goal_from_name("Lose Weight"))
+    cur = data.conn.cursor()
+    cur.execute("SELECT name, goal_icon, start, end, iteration_amount, iteration_to_goal FROM goals")
+    print(cur.fetchall())
+'''
