@@ -34,10 +34,13 @@
 
 
             MDTextField:
+                id: goal_name
                 size_hint_max_y: dp(25)
                 hint_text: "Goal Name"
                 helper_text: "Pick something unique and fun"
                 helper_text_mode: "on_focus"
+                required: True
+                on_text_validate: root.goal_name = self.text
 
             MDLabel:
                 size_hint_max_y: dp(25)
@@ -52,23 +55,23 @@
                     radio_icon_down: "emoticon-excited"
                     pos_hint: {"center_y": 0.5}
                     active: True
-                    on_active: root.get_intensity(0.01)
+                    on_active: root.intensity = 0.01
                 IntensityCheck:
                     radio_icon_down: "emoticon-happy"
                     pos_hint: {"center_y": 0.5}
-                    on_active: root.get_intensity(0.03)
+                    on_active: root.intensity = 0.03
                 IntensityCheck:
                     radio_icon_down: "emoticon-neutral"
                     pos_hint: {"center_y": 0.5}
-                    on_active: root.get_intensity(0.05)
+                    on_active: root.intensity = 0.05
                 IntensityCheck:
                     radio_icon_down: "emoticon-sad"
                     pos_hint: {"center_y": 0.5}
-                    on_active: root.get_intensity(0.07)
+                    on_active: root.intensity = 0.07
                 IntensityCheck:
                     radio_icon_down: "emoticon-devil"
                     pos_hint: {"center_y": 0.5}
-                    on_active: root.get_intensity(0.1)
+                    on_active: root.intensity = 0.1
 
             BoxLayout:
                 size_hint_max_y: dp(30)
@@ -78,23 +81,29 @@
                     radio_icon_normal: "counter"
                     radio_icon_down: "counter"
                     pos_hint: {"center_x": 0.3,"center_y": 0.5}
-                    active: True
-                    on_active: root.get_goal_type("counter")
+                    on_active:
+                        root.end_goal_text = "What is your final rep goal?"
+                        root.icon = "counter"
                 MDLabel:
                     text: "Goal Type"
                     pos_hint: {"center_x": 0.5, "center_y": 0.5}
                 GoalType:
                     radio_icon_normal: "alarm"
                     radio_icon_down: "alarm"
-                    on_active: root.get_goal_type("alarm")
+                    on_active:
+                        root.end_goal_text = "What is your final time goal?"
+                        root.icon = "alarm"
                     pos_hint: {"center_x": 0.8, "center_y": 0.5}
 
             MDLabel
                 text: root.end_goal_text
 
-            MDSlider:
-                min: 0
-                max: 100
+            MDTextField:
+                id: end_value
+                required: True
+                input_filter: 'int'
+                helper_text_mode: "on_error"
+                helper_text: "Insert only numbers"
 
         # ^^^^^ Everything but the toolbars goes in here  ^^^^^
 
@@ -102,6 +111,7 @@
             MDToolbar:
                 icon: "check-circle"
                 on_action_button:
+                    root.create_new_goal()
                     root.manager.transition.direction = 'right'
                     root.manager.current = "main"
 
@@ -110,12 +120,31 @@
     BoxLayout:
         orientation: 'vertical'
         MDToolbar:
-            title: '1% Better'
+            title: 'Goal Stats'
             elevation: 8
             height: dp(40)
-        ScrollView:
-            MDList:
-                id: goal_list
+
+        BoxLayout:
+            orientation: 'horizontal'
+            MDFloatingActionButton:
+                icon: root.goal_icon
+            MDFlatRectangleButton:
+                text: root.goal_name
+
+        BoxLayout:
+            orientation: 'horizontal'
+            MDFlatRectangleButton:
+                text: root.start_value
+            MDFlatRectangleButton:
+                text: root.end_value
+
+        BoxLayout:
+            orientation: 'horizontal'
+            MDFlatRectangleButton:
+                text: root.iteration_percent
+            MDFlatRectangleButton:
+                text: root.iteration_percent
+
         MDBottomAppBar:
             MDToolbar:
                 icon: "plus"
@@ -129,18 +158,9 @@
     BoxLayout:
         orientation: 'vertical'
         MDToolbar:
-            title: '1% Better'
+            title: 'Info Screen'
             elevation: 8
             height: dp(40)
-        ScrollView:
-            MDList:
-                id: goal_list
-        MDBottomAppBar:
-            MDToolbar:
-                icon: "plus"
-                type: "bottom"
-                on_action_button: root.manager.current = "main"
-                mode: "free-end"
 
 <IntensityCheck@MDCheckbox>:
     group: 'intensity'
@@ -155,8 +175,9 @@
 <GoalListItem>:
     text: root.goal_name
     secondary_text: root.goal_amount
+    on_touch_up:
+        app.sm.current = "goal_stats"
+
 
     IconLeftWidget:
-#    I don't think this is need anymore
-#        id: goal_icon
         icon: root.goal_icon

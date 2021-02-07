@@ -1,27 +1,18 @@
-from typing import List
+from database import Database
 
 from kivymd.app import MDApp
-from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.list import MDList, TwoLineIconListItem
 
 from kivy.core.window import Window
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.properties import ObjectProperty, StringProperty, NumericProperty
 
-
-l_goal_name: list[str] = ["Time Goal1", "Time Goal2", "Time Goal3", "Time Goal4"]
-l_goal_icon: list[str] = ["counter", "alarm", "alarm", "alarm"]
-l_goal_amount: list[int] = [100, 200, 300, 400]
+data_base = Database()
 
 # FOR TESTING PURPOSES MAKES IT APROX THE SIZE OF A PHONE
 Window.size = (300, 500)
 
-
-class Goal:
-    def __init__(self):
-        self.icon = ""
-        self.intensity = 0
-        self.goal_name = "goal_name"
+# TODO: Write Docstrings for every class
 
 
 class GoalListItem(TwoLineIconListItem):
@@ -42,16 +33,15 @@ class MainScreen(Screen):
         self.update_goals()
 
     def update_goals(self):
-        for i in range(len(l_goal_name)):
+        list_of_goals = data_base.get_all_goals()
+        for goal_dict in list_of_goals:
             self.ids.goal_list.add_widget(
                 GoalListItem(
-                    goal_name=l_goal_name[i],
-                    goal_amount=l_goal_amount[i],
-                    goal_icon=l_goal_icon[i],
+                    goal_name=goal_dict["goal_name"],
+                    goal_amount=goal_dict["current_value"],
+                    goal_icon=goal_dict["goal_icon"],
                 )
             )
-
-    pass
 
 
 class GoalStatsScreen(Screen):
@@ -59,54 +49,76 @@ class GoalStatsScreen(Screen):
 
 
 class GoalCreationScreen(Screen):
-    end_goal_text = StringProperty("Text")
+    end_goal_text = StringProperty("Select a goal type")
+    goal_name = StringProperty("")
+    icon = StringProperty("")
 
-    def __init__(self, **kw):
-        self.new_goal = Goal()
-        super().__init__(**kw)
+    start_value = 0
+    goal_intensity = NumericProperty(0.01)
+    end_value = NumericProperty(0)
+    iteration_towards_goal = NumericProperty(0)
+    intensity = NumericProperty(0)
 
-    def get_goal_type(self, type):
-        print(type)
-        self.new_goal.icon = type
-        if type == "counter":
-            self.end_goal_text = "What is your End Rep Goal"
-        else:
-            self.end_goal_text = "What is your End Time Goal"
+    def create_new_goal(self):
+        data_base.create_goal(
+            self.goal_name,
+            self.icon,
+            self.start_value,
+            self.end_value,
+            self.iteration_towards_goal,
+            self.intensity,
+        )
 
-    def get_intensity(self, intensity):
-        print(intensity)
-        self.new_goal.intensity = intensity
+        print("create new goal")
+        self.reset_goal()
 
-    def update_end_goal(self, label):
-        self.ids.end_goal.text = label
+    def reset_goal(self):
+        # Reset Ui values
+        self.ids.goal_name.text = ""
+        self.ids.end_value.text = ""
+        self.end_goal_text = "Select a goal type"
 
-    pass
+        # Reset values of variables
+        self.goal_name = ""
+        self.icon = ""
+        self.start_value = ""
+        self.end_value = 0
+        self.iteration_towards_goal = 0
+        self.intensity = 0.01
 
 
 class InfoScreen(Screen):
-    pass
+    goal_name = StringProperty("goal_name")
+    goal_icon = StringProperty("goal_icon")
+    start_value = NumericProperty(0)
+    end_value = NumericProperty(1234)
+    iteration_percent = NumericProperty(0.1)
+    iteration_towards_goal = NumericProperty(0)
+
+    def __init__(self, goal_name, **kw):
+        goal_dict = data_base.get_goal_from_name("goal_name")
+        super().__init__(**kw)
+
+    def get_goal_values(self):
+        gd = self.goal_dict
+        goal_name = gd["goal_name"]
+        goal_icon = gd["goal_icon"]
+        start_value = gd["start_value"]
+        end_value = gd["start_value"]
+        iteration_percent = gd["iteration_percent"]
+        iteration_towards_goal = gd["iteration_towards_goal"]
 
 
 class UiApp(MDApp):
     title = "1% Better"
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def create_goals(self):
-        print("creating goals")
-        pass
-
-    def call_info(self):
-        print("calling info")
+    sm = ScreenManager()
 
     def build(self):
         # This is where you choose what screens you want to load
-        sm = ScreenManager()
-        sm.add_widget(MainScreen(name="main"))
-        sm.add_widget(GoalCreationScreen(name="goal_creation"))
-        # sm.add_widget(GoalStatsScreen(name="goal_stats"))
-        return sm
+        self.sm.add_widget(MainScreen(name="main"))
+        self.sm.add_widget(GoalCreationScreen(name="goal_creation"))
+        self.sm.add_widget(GoalStatsScreen(name="goal_stats"))
+        return self.sm
 
 
 UiApp().run()
