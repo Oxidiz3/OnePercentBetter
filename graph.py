@@ -27,7 +27,7 @@ def graph_goal_progress(goal_name, iteration_amount, iteration_towards_goal, sta
     :param current_value: The current value of the goal the user has done.
     :return: Returns the goal_name with the suffix .png, also saves an image with the same style.
     """
-    total_days = find_days_to_final_goal(start_value, end_value)
+    total_days = find_days_to_final_goal(start_value, end_value, iteration_amount)
     goal_graph = np.linspace(start_value,end_value, total_days)
     current_progress_graph = np.linspace(start_value, current_value, iteration_towards_goal)
     ygoal_graph = start_value * np.exp(iteration_amount * goal_graph)
