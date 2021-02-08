@@ -29,9 +29,9 @@ class Database:
             self.cur = self.conn.cursor()
             self.cur.execute(sql_create_goals_table)
             logging.info(sqlite3.version)
-            self.create_goal("Lose Weight", "alarm", 10, 100, 0.01, 20)
-            self.create_goal("Learn to Program", "alarm", 1, 100, 0.01, 20)
-            self.create_goal("Sleep More", "alarm", 4, 8, 0.01, 20)
+            self.create_goal("Lose Weight", "alarm", 10, 100, 5, .25)
+            self.create_goal("Learn to Program", "alarm", 1, 100, 1, .13)
+            self.create_goal("Sleep More", "alarm", 4, 8, 3, .03)
         except Error as e:
             logging.info(e)
 
@@ -78,11 +78,10 @@ class Database:
         else:
             return False
 
-    def delete_goal(self, name, start, end):
-        delete_sql = """DELETE from goals where name = ? AND start = ? AND end = ?;"""
-        dataTuple = (name, start, end)
+    def delete_goal(self, name):
+        delete_sql = f"""DELETE from goals where name = '{name}';"""
         try:
-            r_set = self.conn.execute(delete_sql, dataTuple)
+            r_set = self.conn.execute(delete_sql)
         except Error as e:
             error = str(e.__dict__["orig"])
             print(error)
@@ -133,12 +132,11 @@ class Database:
             tmp["current_value"] = int(i[2] * math.exp(i[4] * i[5]))
             tmpList.append(tmp)
         return tmpList
-
-
 '''
 if __name__ == "__main__":
     data = Database()
-    cur = data.conn.cursor()
-    cur.execute("SELECT name, goal_icon, start, end, iteration_amount, iteration_to_goal FROM goals")
-    print(cur.fetchall())
+    print(data.get_all_goals())
+    #data.delete_goal('Lose Weight')
+    #data.delete_goal('Learn to Program')
+    #data.delete_goal('Sleep More')
 '''
