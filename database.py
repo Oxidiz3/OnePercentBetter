@@ -135,6 +135,11 @@ class Database:
             tmp["current_value"] = int(i[2] * math.exp(i[4] * i[5]))
             tmpList.append(tmp)
         return tmpList
+
+    def update_increment_towards_goal(self, name, increment_towards_goal):
+        sql = f"UPDATE goals SET increment_towards_goal = {increment_towards_goal} WHERE name = {name}"
+        self.cur.execute(sql)
+        print(self.get_all_goals())
 '''
 if __name__ == "__main__":
     data = Database()
