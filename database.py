@@ -121,6 +121,9 @@ class Database:
         self.cur.execute(sql)
         goalList = self.cur.fetchall()
         tmpList = list()
+        if not goalList:
+            print('Name was not in database.')
+            return False
         for i in goalList:
             tmp = dict()
             tmp["goal_name"] = i[0]
