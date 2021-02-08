@@ -1,13 +1,3 @@
-<UIScreenManager>
-    MainScreen:
-        id: main
-    GoalCreationScreen:
-        id: goal_creation
-    GoalStatsScreen:
-        id: goal_stats
-    InfoScreen:
-        id: info_screen
-
 <MainScreen>
     name: "main"
     BoxLayout:
@@ -24,7 +14,7 @@
             MDToolbar:
                 icon: "plus"
                 type: "bottom"
-                left_action_items: [["information", lambda x: root.screen_change("info","right")]]
+                left_action_items: [["information", lambda x: app.screen_change("info","right")]]
                 on_action_button: app.screen_change("goal_creation", "up")
                 mode: "free-end"
 
@@ -151,35 +141,46 @@
         # Elements between toolbars
         BoxLayout:
             orientation: "vertical"
-            BoxLayout:
-                orientation: 'horizontal'
-                MDFloatingActionButton:
-                    icon: root.goal_icon
-                MDRectangleFlatButton:
-                    text: "Goal Name: " + root.goal_name
+            padding: dp(8)
+            ScrollView:
+                MDList:
+                    TwoLineListItem:
+                        text: "Goal Name"
+                        secondary_text: root.goal_name
+                    TwoLineListItem:
+                        text: "Start value"
+                        secondary_text: str(root.start_value)
+                    TwoLineListItem:
+                        text: "Current value"
+                        secondary_text: str(root.current_value)
+                    TwoLineListItem:
+                        text: "End value"
+                        secondary_text: str(root.end_value)
+                    TwoLineListItem:
+                        text: "Percent"
+                        secondary_text: str(root.iteration_percent)
+                    TwoLineListItem:
+                        text: "Times completed"
+                        secondary_text: str(root.iteration_towards_goal)
+                    TwoLineListItem:
+                        font_style: "H6"
+                        text: "DELETE GOAL"
+                        theme_text_color: "Custom"
+                        bg_color: 1, 0, 0, 1
+                        text_color: 1,1,1,1
+                        on_release:
+                            root.delete_goal()
+                            app.screen_change("main", "right")
 
-            BoxLayout:
-                orientation: 'horizontal'
-                MDRectangleFlatButton:
-                    text: "Start value: " + str(root.start_value)
-                MDRectangleFlatButton:
-                    text: "End value: " + str(root.end_value)
+#            BoxLayout:
+#                size_hint_y: None
+#                height: "200dp"
+#                orientation: 'vertical'
+#
+#                FitImage:
+#                    size_hint_y: 3
+#                    source: "IMAGE SOURCE"
 
-            BoxLayout:
-                orientation: 'horizontal'
-                MDRectangleFlatButton:
-                    text: "Iteration percent: " + str(root.iteration_percent)
-                MDRectangleFlatButton:
-                    text: "Times completed: " + str(root.iteration_towards_goal)
-
-        BoxLayout:
-            orientation: 'horizontal'
-            MDFloatingActionButton:
-                icon: "delete"
-                md_bg_color: 1, 0, 0, 1
-                on_press:
-                    root.delete_goal()
-                    app.screen_change("main", "right")
 
 
 <InfoScreen>:
@@ -190,7 +191,12 @@
             title: 'Info Screen'
             elevation: 8
             height: dp(40)
+            left_action_items: [["arrow-left", lambda x: app.screen_change("main", "right")]]
 
+        MDLabel:
+            halign: "center"
+            text:
+                "One percent better works effectively by easing you into your goals at a manageable pace. \n Did you know if you increased by only 1% every day for a year you would be 37 times better at whatever goal you were working on! Try it out!"
 <IntensityCheck@MDCheckbox>:
     group: 'intensity'
     size_hint: None, None
@@ -201,11 +207,20 @@
     size_hint: None, None
     size: dp(48), dp(48)
 
+
+<CancelButton@MDFlatButton>:
+    text: "check"
+
+<GoalDialogBox@MDDialog>:
+    size_hint: (0.75, 1)
+
 <GoalListItem>:
     text: root.goal_name
     secondary_text: root.goal_amount
     IconLeftWidget:
         icon: root.goal_icon
+        on_release:
+            app.show_dialog_box(root.text)
     IconRightWidget:
         icon: "dots-vertical"
         on_release:
