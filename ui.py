@@ -1,16 +1,12 @@
+from database import Database
+import graph
 from kivymd.uix.button import MDFlatButton, MDRaisedButton
 from kivymd.uix.dialog import MDDialog
-
-from database import Database
-
 from kivymd.app import MDApp
-from kivymd.uix.list import TwoLineIconListItem, TwoLineAvatarIconListItem
-
-from kivy.core.window import Window
+from kivymd.uix.list import TwoLineAvatarIconListItem
 from kivy.uix.screenmanager import (
     Screen,
     ScreenManager,
-    SlideTransition,
     NoTransition,
 )
 from kivy.properties import ObjectProperty, StringProperty, NumericProperty
@@ -62,7 +58,7 @@ class MainScreen(Screen):
 
 
 class GoalStatsScreen(Screen):
-    """Screen where all of the goal stats are dispalyed"""
+    """Screen where all of the goal stats are displayed"""
 
     goal_name = StringProperty("goal_name")
     goal_icon = StringProperty("alarm")
@@ -103,6 +99,7 @@ class GoalCreationScreen(Screen):
     start_goal_text = StringProperty("Select a goal type")
     goal_name = StringProperty("")
     icon = StringProperty("")
+    graph_name = StringProperty("")
 
     start_value = ObjectProperty(2)
     end_value = ObjectProperty(0)
@@ -142,6 +139,16 @@ class GoalCreationScreen(Screen):
         self.end_value = 0
         self.iteration_towards_goal = 0
         self.intensity = 0.01
+
+    def generate_graph(self):
+        self.graph_name = graph.graph_goal_progress(
+            self.goal_name,
+            self.intensity,
+            self.iteration_towards_goal,
+            self.start_value,
+            self.end_value,
+            self.start_value,
+        )
 
 
 class InfoScreen(Screen):
@@ -210,7 +217,9 @@ class UiApp(MDApp):
                 buttons=[
                     # ON_RELEASE CANNOT EQUAL A FUNCTION... LEAVE THE PARENTHESES OFF
                     MDFlatButton(text="Cancel", on_release=self.close_dialog_box),
-                    MDRaisedButton(text="Log goal", on_release=self.increment_goal),
+                    MDRaisedButton(
+                        text="Log completion", on_release=self.increment_goal
+                    ),
                 ],
             )
         self.dialog.open()
@@ -232,7 +241,6 @@ class UiApp(MDApp):
             gd["iteration_goal"],
             gd["iteration_amount"],
         )
-        self.increment_goal()
         self.refresh_main_screen()
         self.close_dialog_box()
 
