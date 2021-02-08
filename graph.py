@@ -34,5 +34,5 @@ def graph_goal_progress(goal_name, iteration_amount, iteration_towards_goal, sta
     ycurrent_progress_graph = start_value * np.exp(iteration_amount * current_progress_graph)
     plt.plot(goal_graph, ygoal_graph, color='black')
     plt.plot(current_progress_graph, ycurrent_progress_graph, color='red')
-    plt.savefig(f'{goal_name}.png')
+    plt.savefig(f'Images\{goal_name}.png')
     return f'{goal_name}.png'
