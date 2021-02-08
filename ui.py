@@ -62,12 +62,14 @@ class GoalStatsScreen(Screen):
 
     goal_name = StringProperty("goal_name")
     goal_icon = StringProperty("alarm")
+
     start_value = NumericProperty(0)
     current_value = NumericProperty(10)
     end_value = NumericProperty(1234)
     iteration_percent = NumericProperty(0.1)
     iteration_towards_goal = NumericProperty(0)
     goal_dict = {}
+    graph_name = ""
 
     def on_pre_enter(self, *args):
         """Called before the Main screen is opened"""
@@ -86,6 +88,18 @@ class GoalStatsScreen(Screen):
         self.end_value = gd["end"]
         self.iteration_percent = gd["iteration_amount"]
         self.iteration_towards_goal = gd["iteration_goal"]
+        self.graph_name = self.generate_graph()
+
+    def generate_graph(self):
+        graph_name = graph.graph_goal_progress(
+            self.goal_name,
+            self.iteration_percent,
+            self.iteration_towards_goal,
+            self.start_value,
+            self.end_value,
+            self.current_value,
+        )
+        return graph_name
 
     def delete_goal(self):
         """Delete goal from database"""
@@ -106,6 +120,7 @@ class GoalCreationScreen(Screen):
     goal_intensity = NumericProperty(0.01)
     iteration_towards_goal = NumericProperty(0)
     intensity = NumericProperty(0)
+    days_to_final_goal = NumericProperty(0)
 
     def create_new_goal(self):
         """Creates goals in database"""
@@ -114,13 +129,14 @@ class GoalCreationScreen(Screen):
             self.icon,
             self.start_value,
             self.end_value,
-            int(self.iteration_towards_goal),
+            self.iteration_towards_goal,
             self.intensity,
         )
         if create_try:
             print("create new goal")
         else:
             print("goal failed")
+        self.generate_graph()
         self.reset_goal()
 
     def reset_goal(self):
@@ -145,9 +161,9 @@ class GoalCreationScreen(Screen):
             self.goal_name,
             self.intensity,
             self.iteration_towards_goal,
-            self.start_value,
-            self.end_value,
-            self.start_value,
+            int(self.start_value),
+            int(self.end_value),
+            int(self.start_value),
         )
 
 
@@ -179,7 +195,7 @@ class UiApp(MDApp):
     def screen_change(self, screen_to_change_to: str, transition_direction="left"):
         """
         :param screen_to_change_to: Name of screen we want to chang to
-        :param transition_direction: Which way we transiton
+        :param transition_direction: Which way we transition
         """
         self.sm.current = screen_to_change_to
         self.sm.transition.direction = transition_direction

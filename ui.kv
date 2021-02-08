@@ -119,6 +119,12 @@
                 helper_text: "Insert only numbers"
                 on_text: root.end_value = self.text
 
+            TwoLineListItem:
+                text: "Days until you reach your habit"
+                secondary_text: str(root.days_to_final_goal)
+            MDLabel:
+                text: "Days until you reach your habit: " + str(root.days_to_final_goal)
+
         # ^^^^^ Everything but the toolbars goes in here  ^^^^^
 
         MDBottomAppBar:
