@@ -174,9 +174,9 @@
 
         BoxLayout:
             orientation: 'horizontal'
-            MDRectangleFlatButton:
-                text: "Delete goal"
-#                md_bg_color: "red"
+            MDFloatingActionButton:
+                icon: "delete"
+                md_bg_color: 1, 0, 0, 1
                 on_press:
                     root.delete_goal()
                     app.screen_change("main", "right")
