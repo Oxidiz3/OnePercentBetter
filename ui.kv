@@ -1,3 +1,13 @@
+<UIScreenManager>
+    MainScreen:
+        id: main
+    GoalCreationScreen:
+        id: goal_creation
+    GoalStatsScreen:
+        id: goal_stats
+    InfoScreen:
+        id: info_screen
+
 <MainScreen>
     name: "main"
     BoxLayout:
@@ -9,12 +19,13 @@
         ScrollView:
             MDList:
                 id: goal_list
+
         MDBottomAppBar:
             MDToolbar:
                 icon: "plus"
                 type: "bottom"
-#                left_action_items: [[lambda x: root.manager.current = "info"]]
-                on_action_button: root.manager.current = "goal_creation"
+                left_action_items: [["information", lambda x: root.screen_change("info","right")]]
+                on_action_button: app.screen_change("goal_creation", "up")
                 mode: "free-end"
 
 <GoalCreationScreen>:
@@ -25,6 +36,7 @@
         MDToolbar:
             title: 'Goal Creation'
             elevation: 8
+            left_action_items: [["arrow-left", lambda x: app.screen_change("main", "down")]]
             height: dp(40)
 
         # vvvvvvv Everything but the toolbars goes in here vvvvvvv
@@ -40,7 +52,7 @@
                 helper_text: "Pick something unique and fun"
                 helper_text_mode: "on_focus"
                 required: True
-                on_text_validate: root.goal_name = self.text
+                on_text: root.goal_name = self.text
 
             MDLabel:
                 size_hint_max_y: dp(25)
@@ -105,6 +117,7 @@
                 input_filter: 'int'
                 helper_text_mode: "on_error"
                 helper_text: "Insert only numbers"
+                on_text: root.start_value = self.text
 
             MDLabel
                 text: root.end_goal_text
@@ -114,6 +127,7 @@
                 input_filter: 'int'
                 helper_text_mode: "on_error"
                 helper_text: "Insert only numbers"
+                on_text: root.end_value = self.text
 
         # ^^^^^ Everything but the toolbars goes in here  ^^^^^
 
@@ -122,8 +136,7 @@
                 icon: "check-circle"
                 on_action_button:
                     root.create_new_goal()
-                    root.manager.transition.direction = 'right'
-                    root.manager.current = "main"
+                    app.screen_change("main", "down")
 
 <GoalStatsScreen>:
     name: 'goal_stats'
@@ -133,33 +146,38 @@
             title: 'Goal Stats'
             elevation: 8
             height: dp(40)
+            left_action_items: [["arrow-left", lambda x: app.screen_change("main", "right")]]
 
+        # Elements between toolbars
         BoxLayout:
-            orientation: 'horizontal'
-            MDFloatingActionButton:
-                icon: root.goal_icon
-            MDFlatRectangleButton:
-                text: root.goal_name
+            orientation: "vertical"
+            BoxLayout:
+                orientation: 'horizontal'
+                MDFloatingActionButton:
+                    icon: root.goal_icon
+                MDRectangleFlatButton:
+                    text: "Goal Name: " + root.goal_name
 
-        BoxLayout:
-            orientation: 'horizontal'
-            MDFlatRectangleButton:
-                text: root.start_value
-            MDFlatRectangleButton:
-                text: root.end_value
+            BoxLayout:
+                orientation: 'horizontal'
+                MDRectangleFlatButton:
+                    text: "Start value: " + str(root.start_value)
+                MDRectangleFlatButton:
+                    text: "End value: " + str(root.end_value)
 
-        BoxLayout:
-            orientation: 'horizontal'
-            MDFlatRectangleButton:
-                text: root.iteration_percent
-            MDFlatRectangleButton:
-                text: root.iteration_percent
+            BoxLayout:
+                orientation: 'horizontal'
+                MDRectangleFlatButton:
+                    text: "Iteration percent: " + str(root.iteration_percent)
+                MDRectangleFlatButton:
+                    text: "Times completed: " + str(root.iteration_towards_goal)
 
         MDBottomAppBar:
             MDToolbar:
                 icon: "plus"
                 type: "bottom"
-                on_action_button: root.manager.current = "main"
+                on_action_button:
+                    app.screen_change("main","left")
                 mode: "free-end"
 
 
@@ -185,9 +203,10 @@
 <GoalListItem>:
     text: root.goal_name
     secondary_text: root.goal_amount
-    on_touch_up:
-        app.sm.current = "goal_stats"
-
-
     IconLeftWidget:
         icon: root.goal_icon
+    IconRightWidget:
+        icon: "dots-vertical"
+        on_release:
+            app.screen_change("goal_stats", "left")
+            app.send_goal_name(root.text)

@@ -7,6 +7,8 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+misc.xml
+OnePercentBetter.iml
 .Python
 build/
 develop-eggs/
