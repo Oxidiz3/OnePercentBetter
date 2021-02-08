@@ -77,6 +77,7 @@ class GoalStatsScreen(Screen):
     goal_dict = {}
 
     def on_pre_enter(self, *args):
+        print(self.goal_name)
         self.goal_dict = data_base.get_goal_from_name(self.goal_name)[0]
         print(self.goal_dict)
         self.get_goal_values()
@@ -90,7 +91,8 @@ class GoalStatsScreen(Screen):
         self.iteration_percent = gd["iteration_amount"]
         self.iteration_towards_goal = gd["iteration_goal"]
 
-    pass
+    def delete_goal(self):
+        data_base.delete_goal(self.goal_name)
 
 
 class GoalCreationScreen(Screen):
@@ -148,7 +150,7 @@ class UIScreenManager(ScreenManager):
 
 class UiApp(MDApp):
     title = "1% Better"
-    sm = ScreenManager()
+    sm = ScreenManager(transition=NoTransition())
 
     def build(self):
         # This is where you choose what screens you want to load

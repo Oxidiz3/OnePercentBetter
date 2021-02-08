@@ -172,13 +172,14 @@
                 MDRectangleFlatButton:
                     text: "Times completed: " + str(root.iteration_towards_goal)
 
-        MDBottomAppBar:
-            MDToolbar:
-                icon: "plus"
-                type: "bottom"
-                on_action_button:
-                    app.screen_change("main","left")
-                mode: "free-end"
+        BoxLayout:
+            orientation: 'horizontal'
+            MDRectangleFlatButton:
+                text: "Delete goal"
+#                md_bg_color: "red"
+                on_press:
+                    root.delete_goal()
+                    app.screen_change("main", "right")
 
 
 <InfoScreen>:
@@ -208,5 +209,5 @@
     IconRightWidget:
         icon: "dots-vertical"
         on_release:
-            app.screen_change("goal_stats", "left")
             app.send_goal_name(root.text)
+            app.screen_change("goal_stats", "left")
