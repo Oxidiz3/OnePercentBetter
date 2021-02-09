@@ -119,7 +119,7 @@ class GoalCreationScreen(Screen):
     end_value = ObjectProperty(0)
     goal_intensity = NumericProperty(0.01)
     iteration_towards_goal = NumericProperty(0)
-    intensity = NumericProperty(0)
+    intensity = NumericProperty(0.01)
     completions_left = NumericProperty(0)
 
     def create_new_goal(self):
@@ -157,7 +157,22 @@ class GoalCreationScreen(Screen):
         self.intensity = 0.01
 
     def refresh_time_left(self):
-        if self.end_value != self.start_value:
+        try:
+            int(self.start_value)
+        except ValueError:
+            print("String is empty00")
+            self.start_value = 0
+            self.completions_left = 0
+        try:
+            int(self.end_value)
+        except ValueError:
+            print("String is empty01")
+            self.start_value = 0
+            self.completions_left = 0
+
+        if self.end_value != self.start_value and (
+            self.end_value != 0 and self.start_value != 0
+        ):
             self.completions_left = graph.find_days_to_final_goal(
                 int(self.start_value), int(self.end_value), self.intensity
             )

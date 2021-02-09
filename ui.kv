@@ -57,23 +57,33 @@
                     radio_icon_down: "emoticon-excited"
                     pos_hint: {"center_y": 0.5}
                     active: True
-                    on_active: root.intensity = 0.01
+                    on_active:
+                        root.intensity = 0.01
+                        root.refresh_time_left()
                 IntensityCheck:
                     radio_icon_down: "emoticon-happy"
                     pos_hint: {"center_y": 0.5}
-                    on_active: root.intensity = 0.03
+                    on_active:
+                        root.intensity = 0.03
+                        root.refresh_time_left()
                 IntensityCheck:
                     radio_icon_down: "emoticon-neutral"
                     pos_hint: {"center_y": 0.5}
-                    on_active: root.intensity = 0.05
+                    on_active:
+                        root.intensity = 0.05
+                        root.refresh_time_left()
                 IntensityCheck:
                     radio_icon_down: "emoticon-sad"
                     pos_hint: {"center_y": 0.5}
-                    on_active: root.intensity = 0.07
+                    on_active:
+                        root.intensity = 0.07
+                        root.refresh_time_left()
                 IntensityCheck:
                     radio_icon_down: "emoticon-devil"
                     pos_hint: {"center_y": 0.5}
-                    on_active: root.intensity = 0.1
+                    on_active:
+                        root.intensity = 0.1
+                        root.refresh_time_left()
 
             MDLabel
                 text: "Where do you want to start"
@@ -192,7 +202,7 @@
 
 <GoalListItem>:
     text: root.goal_name
-    secondary_text: root.goal_amount
+    secondary_text: "Your goal is to do " + root.goal_amount
     on_release:
         app.show_dialog_box(root.text)
     IconLeftWidget:
