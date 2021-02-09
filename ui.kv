@@ -85,24 +85,26 @@
                         root.intensity = 0.1
                         root.refresh_time_left()
 
-            MDLabel
-                text: "Where do you want to start"
+#            MDLabel
+#                text: "Where do you want to start"
             MDTextField:
                 id: start_value
                 required: True
                 input_filter: 'int'
+                hint_text: "Where do you want to start? (numbers only)"
                 helper_text_mode: "on_error"
                 helper_text: "Insert only numbers"
                 on_text:
                     root.start_value = self.text
                     root.refresh_time_left()
 
-            MDLabel
-                text: "What's your end Goal"
+#            MDLabel
+#                text: "What's your end Goal"
             MDTextField:
                 id: end_value
                 required: True
                 input_filter: 'int'
+                hint_text: "What's your end goal? (numbers only)"
                 helper_text_mode: "on_error"
                 helper_text: "Insert only numbers"
                 on_text:
@@ -113,12 +115,12 @@
 
         # ^^^^^ Everything but the toolbars goes in here  ^^^^^
 
-        MDBottomAppBar:
-            MDToolbar:
-                icon: "check-circle"
-                on_action_button:
-                    root.create_new_goal()
-                    app.screen_change("main", "down")
+        MDFloatingActionButton:
+            icon: "check-circle"
+            pos_hint: {"center_x": 0.9, "center_y": 1}
+            on_release:
+                root.create_new_goal()
+                app.screen_change("main", "down")
 
 <GoalStatsScreen>:
     name: 'goal_stats'
