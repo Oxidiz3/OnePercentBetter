@@ -13,7 +13,8 @@ def find_days_to_final_goal(start_value, end_value, iteration_amount):
     """
     if start_value > end_value:
         iteration_amount = -1 * iteration_amount
-    return int(np.ceil(np.log(end_value / start_value) / iteration_amount))
+        print(f'{start_value} > {end_value}')
+    return int(np.abs(np.ceil(np.log(end_value / start_value) / iteration_amount)))
 
 
 def graph_goal_progress(goal_name, iteration_amount, iteration_towards_goal, start_value, end_value, current_value):
@@ -28,9 +29,11 @@ def graph_goal_progress(goal_name, iteration_amount, iteration_towards_goal, sta
     :return: Returns the goal_name with the suffix .png, also saves an image with the same style.
     """
     total_days = find_days_to_final_goal(start_value, end_value, iteration_amount)
-    goal_graph = np.linspace(start_value,end_value, total_days * 3)
-    current_progress_graph = np.linspace(start_value, current_value, iteration_towards_goal * 3)
-    ygoal_graph = start_value * np.exp(iteration_amount * goal_graph)
+    goal_graph = np.linspace(0,total_days, total_days)
+    goal_graph = goal_graph.astype(dtype=np.int64)
+    current_progress_graph = np.linspace(0,iteration_towards_goal, iteration_towards_goal).astype(dtype=np.int64)
+    ygoal_graph = start_value * np.exp(iteration_amount * goal_graph.copy())
+    ygoal_graph.astype(np.int64)
     ycurrent_progress_graph = start_value * np.exp(iteration_amount * current_progress_graph)
     plt.plot(goal_graph, ygoal_graph, color='black')
     plt.plot(current_progress_graph, ycurrent_progress_graph, color='red')
