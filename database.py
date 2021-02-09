@@ -144,12 +144,12 @@ class Database:
         :param increment_towards_goal: the new value for increment_towards_goal.
         :return:
         """
-        select_sql = f"SELECT increment_towards_goal FROM goals WHERE name = '{name}'"
+        select_sql = f"SELECT iteration_towards_goal FROM goals WHERE name = '{name}'"
         self.cur.execute(select_sql)
         lis = self.cur.fetchall()
         increment_towards_goal = lis[0]
         print(increment_towards_goal)
-        sql = f"UPDATE goals SET increment_towards_goal = {increment_towards_goal} WHERE name = '{name}'"
+        sql = f"UPDATE goals SET iteration_towards_goal = {increment_towards_goal} WHERE name = '{name}'"
         self.cur.execute(sql)
         print(self.get_all_goals())
 '''
