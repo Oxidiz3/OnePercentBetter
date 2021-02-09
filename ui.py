@@ -115,12 +115,12 @@ class GoalCreationScreen(Screen):
     icon = StringProperty("")
     graph_name = StringProperty("")
 
-    start_value = ObjectProperty(2)
+    start_value = ObjectProperty(0)
     end_value = ObjectProperty(0)
     goal_intensity = NumericProperty(0.01)
     iteration_towards_goal = NumericProperty(0)
     intensity = NumericProperty(0)
-    days_to_final_goal = NumericProperty(0)
+    completions_left = NumericProperty(0)
 
     def create_new_goal(self):
         """Creates goals in database"""
@@ -155,6 +155,12 @@ class GoalCreationScreen(Screen):
         self.end_value = 0
         self.iteration_towards_goal = 0
         self.intensity = 0.01
+
+    def refresh_time_left(self):
+        if self.end_value != self.start_value:
+            self.completions_left = graph.find_days_to_final_goal(
+                int(self.start_value), int(self.end_value), self.intensity
+            )
 
     def generate_graph(self):
         self.graph_name = graph.graph_goal_progress(
@@ -223,21 +229,18 @@ class UiApp(MDApp):
         """
         goal_dict = data_base.get_goal_from_name(goal_name)[0]
         self.current_goal_name = goal_name
-        if not self.dialog:
-            self.dialog = GoalDialogBox(
-                title=goal_name,
-                text="You've completed this goal "
-                + str(goal_dict["iteration_goal"])
-                + " times so far",
-                # size_hint=(0.75, 1),
-                buttons=[
-                    # ON_RELEASE CANNOT EQUAL A FUNCTION... LEAVE THE PARENTHESES OFF
-                    MDFlatButton(text="Cancel", on_release=self.close_dialog_box),
-                    MDRaisedButton(
-                        text="Log completion", on_release=self.increment_goal
-                    ),
-                ],
-            )
+        self.dialog = GoalDialogBox(
+            title=goal_name,
+            text="You've completed this goal "
+            + str(goal_dict["iteration_goal"])
+            + " times so far",
+            # size_hint=(0.75, 1),
+            buttons=[
+                # ON_RELEASE CANNOT EQUAL A FUNCTION... LEAVE THE PARENTHESES OFF
+                MDFlatButton(text="Cancel", on_release=self.close_dialog_box),
+                MDRaisedButton(text="Log completion", on_release=self.increment_goal),
+            ],
+        )
         self.dialog.open()
 
     def increment_goal(self, *args):

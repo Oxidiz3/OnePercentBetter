@@ -75,55 +75,31 @@
                     pos_hint: {"center_y": 0.5}
                     on_active: root.intensity = 0.1
 
-            BoxLayout:
-                size_hint_max_y: dp(30)
-                orientation: 'horizontal'
-
-                GoalType:
-                    radio_icon_normal: "counter"
-                    radio_icon_down: "counter"
-                    pos_hint: {"center_x": 0.3,"center_y": 0.5}
-                    on_active:
-                        root.end_goal_text = "What is your final rep goal?"
-                        root.start_goal_text = "What is your starting rep goal?"
-                        root.icon = "counter"
-                MDLabel:
-                    text: "Goal Type"
-                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
-                GoalType:
-                    radio_icon_normal: "alarm"
-                    radio_icon_down: "alarm"
-                    on_active:
-                        root.end_goal_text = "What is your final time goal?"
-                        root.start_goal_text = "What is your starting time goal?"
-                        root.icon = "alarm"
-                    pos_hint: {"center_x": 0.8, "center_y": 0.5}
-
             MDLabel
-                text: root.start_goal_text
+                text: "Where do you want to start"
             MDTextField:
                 id: start_value
                 required: True
                 input_filter: 'int'
                 helper_text_mode: "on_error"
                 helper_text: "Insert only numbers"
-                on_text: root.start_value = self.text
+                on_text:
+                    root.start_value = self.text
+                    root.refresh_time_left()
 
             MDLabel
-                text: root.end_goal_text
+                text: "What's your end Goal"
             MDTextField:
                 id: end_value
                 required: True
                 input_filter: 'int'
                 helper_text_mode: "on_error"
                 helper_text: "Insert only numbers"
-                on_text: root.end_value = self.text
-
-            TwoLineListItem:
-                text: "Days until you reach your habit"
-                secondary_text: str(root.days_to_final_goal)
+                on_text:
+                    root.end_value = self.text
+                    root.refresh_time_left()
             MDLabel:
-                text: "Days until you reach your habit: " + str(root.days_to_final_goal)
+                text: "Completions until you reach your habit: " + str(root.completions_left)
 
         # ^^^^^ Everything but the toolbars goes in here  ^^^^^
 
@@ -208,12 +184,6 @@
     size_hint: None, None
     size: dp(48), dp(48)
 
-<GoalType@MDCheckbox>:
-    group: 'goal_type'
-    size_hint: None, None
-    size: dp(48), dp(48)
-
-
 <CancelButton@MDFlatButton>:
     text: "check"
 
@@ -223,12 +193,14 @@
 <GoalListItem>:
     text: root.goal_name
     secondary_text: root.goal_amount
+    on_release:
+        app.show_dialog_box(root.text)
     IconLeftWidget:
-        icon: root.goal_icon
-        on_release:
-            app.show_dialog_box(root.text)
-    IconRightWidget:
         icon: "dots-vertical"
         on_release:
             app.send_goal_name(root.text)
             app.screen_change("goal_stats", "left")
+    IconRightWidget:
+        icon: "check-circle-outline"
+        on_release:
+            app.show_dialog_box(root.text)
