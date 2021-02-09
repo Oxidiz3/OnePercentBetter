@@ -138,6 +138,12 @@ class Database:
         return tmpList
 
     def update_increment_towards_goal(self, name, increment_towards_goal):
+        """
+        Updates a records increment_towards_goal to the passed value.
+        :param name: the name used to get the item.
+        :param increment_towards_goal: the new value for increment_towards_goal.
+        :return:
+        """
         sql = f"UPDATE goals SET increment_towards_goal = {increment_towards_goal} WHERE name = {name}"
         self.cur.execute(sql)
         print(self.get_all_goals())
