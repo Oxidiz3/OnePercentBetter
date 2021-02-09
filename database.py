@@ -51,7 +51,7 @@ class Database:
         :param end_value: ending value
         :param iteration_towards_goal: how close to the goal are you.
         :param iteration_percent: the percentage the iteration goes up by.
-        :return:
+        :return: returns true if the transaction occurred false if an error was encountered.
         """
         # Checking to make sure there are no duplicate entries in the database already.
         select_sql = """SELECT name, goal_icon, start, end, iteration_amount, iteration_to_goal FROM goals 
