@@ -29,9 +29,9 @@ class Database:
             self.cur = self.conn.cursor()
             self.cur.execute(sql_create_goals_table)
             logging.info(sqlite3.version)
-            self.create_goal("Lose Weight", "alarm", 10, 100, 5, .25)
-            self.create_goal("Learn to Program", "alarm", 1, 100, 1, .13)
-            self.create_goal("Sleep More", "alarm", 4, 8, 3, .03)
+            #self.create_goal("Lose Weight", "alarm", 10, 100, 5, .25)
+            #self.create_goal("Learn to Program", "alarm", 1, 100, 1, .13)
+            #self.create_goal("Sleep More", "alarm", 4, 8, 3, .03)
         except Error as e:
             logging.info(e)
 
