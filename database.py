@@ -61,6 +61,8 @@ class Database:
         goalList = self.cur.fetchall()
         # If there are no duplicate entries then the database goes ahead with the transaction.
         if not goalList and len(goal_name) != 0:
+            if start_value > end_value:
+                iteration_percent *= -1
             dataTuple = (
                 goal_name,
                 goal_icon,
