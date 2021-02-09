@@ -10,7 +10,6 @@ class Database:
         running and started.
         :param db_file: a string to the database path.
         """
-
         self.conn = None
         try:
             self.conn = sqlite3.connect(

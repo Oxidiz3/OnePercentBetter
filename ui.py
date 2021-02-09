@@ -62,6 +62,7 @@ class GoalStatsScreen(Screen):
 
     goal_name = StringProperty("goal_name")
     goal_icon = StringProperty("alarm")
+    path_to_graph = StringProperty("Images\\Drawing.png")
 
     start_value = NumericProperty(0)
     current_value = NumericProperty(10)
@@ -72,11 +73,10 @@ class GoalStatsScreen(Screen):
     graph_name = ""
 
     def on_pre_enter(self, *args):
-        """Called before the Main screen is opened"""
-        print(self.goal_name)
+        """Called before the stats screen is opened"""
         self.goal_dict = data_base.get_goal_from_name(self.goal_name)[0]
-        print(self.goal_dict)
         self.get_goal_values()
+        self.path_to_graph = self.generate_graph()
 
     def get_goal_values(self):
         """Calls to the database and gets goal values"""
@@ -91,15 +91,19 @@ class GoalStatsScreen(Screen):
         self.graph_name = self.generate_graph()
 
     def generate_graph(self):
-        graph_name = graph.graph_goal_progress(
-            self.goal_name,
-            self.iteration_percent,
-            self.iteration_towards_goal,
-            self.start_value,
-            self.end_value,
-            self.current_value,
-        )
-        return graph_name
+        try:
+            graph_name = graph.graph_goal_progress(
+                self.goal_name,
+                self.iteration_percent,
+                self.iteration_towards_goal,
+                self.start_value,
+                self.end_value,
+                self.current_value,
+            )
+            print("Images\\" + graph_name)
+            return "Images\\" + graph_name
+        except ZeroDivisionError:
+            print("Divided by Zero")
 
     def delete_goal(self):
         """Delete goal from database"""
