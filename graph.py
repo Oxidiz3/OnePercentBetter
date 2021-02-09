@@ -1,6 +1,6 @@
 from matplotlib import pyplot as plt
 import numpy as np
-
+import math
 
 def find_days_to_final_goal(start_value, end_value, iteration_amount):
     """
@@ -11,10 +11,7 @@ def find_days_to_final_goal(start_value, end_value, iteration_amount):
     :param iteration_amount: the percentage that represents the intensity of the goal in the form 0.1
     :return:
     """
-    if start_value > end_value:
-        iteration_amount = -1 * iteration_amount
-        print(f'{start_value} > {end_value}')
-    return int(np.abs(np.ceil(np.log(end_value / start_value) / iteration_amount)))
+    return int(abs(math.ceil(math.log(end_value / start_value) / iteration_amount)))
 
 
 def graph_goal_progress(goal_name, iteration_amount, iteration_towards_goal, start_value, end_value, current_value):
