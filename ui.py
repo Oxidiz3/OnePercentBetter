@@ -1,3 +1,5 @@
+from kivymd.uix.snackbar import Snackbar
+
 from database import Database
 import graph
 from kivymd.uix.button import MDFlatButton, MDRaisedButton
@@ -138,10 +140,12 @@ class GoalCreationScreen(Screen):
         )
         if create_try:
             print("create new goal")
+            self.generate_graph()
+            self.reset_goal()
         else:
+            error_bar = Snackbar(text="Goal creation failed, needs unique name")
+            error_bar.show()
             print("goal failed")
-        self.generate_graph()
-        self.reset_goal()
 
     def reset_goal(self):
         """Resets goal pages so that it looks fresh"""
@@ -266,19 +270,21 @@ class UiApp(MDApp):
         """increment goals + 1
         :param args: REQUIRED FOR KIVY
         """
-        goal_dict = data_base.get_goal_from_name(self.current_goal_name)[0]
-        goal_dict["iteration_goal"] += 1
-        data_base.delete_goal(self.current_goal_name)
+        data_base.update_increment_towards_goal(self.current_goal_name)
 
-        gd = goal_dict
-        data_base.create_goal(
-            gd["goal_name"],
-            gd["goal_icon"],
-            gd["start"],
-            gd["end"],
-            gd["iteration_goal"],
-            gd["iteration_amount"],
-        )
+        # goal_dict = data_base.get_goal_from_name(self.current_goal_name)[0]
+        # goal_dict["iteration_goal"] += 1
+        # data_base.delete_goal(self.current_goal_name)
+        #
+        # gd = goal_dict
+        # data_base.create_goal(
+        #     gd["goal_name"],
+        #     gd["goal_icon"],
+        #     gd["start"],
+        #     gd["end"],
+        #     gd["iteration_goal"],
+        #     gd["iteration_amount"],
+        # )
         self.refresh_main_screen()
         self.close_dialog_box()
 

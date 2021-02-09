@@ -34,12 +34,11 @@
             orientation: 'vertical'
             padding: dp(10)
 
-
             MDTextField:
                 id: goal_name
                 size_hint_max_y: dp(25)
                 hint_text: "Goal Name"
-                helper_text: "Pick something unique and fun"
+                helper_text: "Name has to be unique"
                 helper_text_mode: "on_focus"
                 required: True
                 on_text: root.goal_name = self.text
@@ -170,15 +169,6 @@
             Image:
                 source: root.path_to_graph
 #-----------------changed stuff above---------------------------------------------------------------------------------------------------------------------------
-
-#            BoxLayout:
-#                size_hint_y: None
-#                height: "200dp"
-#                orientation: 'vertical'
-#
-#                FitImage:
-#                    size_hint_y: 3
-#                    source: "IMAGE SOURCE"
 
 
 
