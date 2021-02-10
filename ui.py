@@ -144,7 +144,6 @@ class GoalCreationScreen(Screen):
         )
         if create_try:
             print("create new goal")
-            self.generate_graph()
             self.reset_goal()
         else:
             error_bar = Snackbar(text="Goal creation failed, needs unique name")
@@ -188,16 +187,6 @@ class GoalCreationScreen(Screen):
             self.completions_left = graph.find_days_to_final_goal(
                 int(self.start_value), int(self.end_value), self.intensity
             )
-
-    def generate_graph(self):
-        self.graph_name = graph.graph_goal_progress(
-            self.goal_name,
-            self.intensity,
-            self.iteration_towards_goal,
-            int(self.start_value),
-            int(self.end_value),
-            int(self.start_value),
-        )
 
 
 class InfoScreen(Screen):
