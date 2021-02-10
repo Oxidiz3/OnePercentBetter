@@ -148,11 +148,9 @@ class Database:
         self.cur.execute(select_sql)
         lis = self.cur.fetchall()
         increment_towards_goal = lis[0][0]
-        print(increment_towards_goal)
         increment_towards_goal += 1
         sql = f"UPDATE goals SET iteration_to_goal = {increment_towards_goal} WHERE name = '{name}'"
         self.cur.execute(sql)
-        print(self.get_all_goals())
 '''
 if __name__ == "__main__":
     data = Database()
