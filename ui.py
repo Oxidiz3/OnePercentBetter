@@ -74,11 +74,15 @@ class GoalStatsScreen(Screen):
     goal_dict = {}
     graph_name = ""
 
+    def __init__(self, **kw):
+        super().__init__(**kw)
+
     def on_pre_enter(self, *args):
         """Called before the stats screen is opened"""
         self.goal_dict = data_base.get_goal_from_name(self.goal_name)[0]
         self.get_goal_values()
         self.path_to_graph = self.generate_graph()
+        self.ids.graph_image.reload()
 
     def get_goal_values(self):
         """Calls to the database and gets goal values"""
@@ -272,19 +276,6 @@ class UiApp(MDApp):
         """
         data_base.update_increment_towards_goal(self.current_goal_name)
 
-        # goal_dict = data_base.get_goal_from_name(self.current_goal_name)[0]
-        # goal_dict["iteration_goal"] += 1
-        # data_base.delete_goal(self.current_goal_name)
-        #
-        # gd = goal_dict
-        # data_base.create_goal(
-        #     gd["goal_name"],
-        #     gd["goal_icon"],
-        #     gd["start"],
-        #     gd["end"],
-        #     gd["iteration_goal"],
-        #     gd["iteration_amount"],
-        # )
         self.refresh_main_screen()
         self.close_dialog_box()
 
